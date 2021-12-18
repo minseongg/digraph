@@ -59,7 +59,6 @@ fn directed_acyclic_graph_rev() -> DiGraph<usize> {
 }
 
 fn directed_acyclic_graph_sub() -> DiGraph<usize> {
-    // reference: https://en.wikipedia.org/wiki/File:Directed_acyclic_graph_2.svg
     let mut digraph = DiGraph::new();
 
     digraph.add_pair_with_edge(5, 11);
@@ -70,7 +69,6 @@ fn directed_acyclic_graph_sub() -> DiGraph<usize> {
 }
 
 fn directed_acyclic_graph_sub_conn() -> DiGraph<usize> {
-    // reference: https://en.wikipedia.org/wiki/File:Directed_acyclic_graph_2.svg
     let mut digraph = DiGraph::new();
 
     digraph.add_pair_with_edge(5, 11);
