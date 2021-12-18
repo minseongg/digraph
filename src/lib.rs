@@ -112,10 +112,10 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     /// Linearizes (topologically sorts) a DAG.
     pub fn linearize(&self) -> Vec<T> {
         // permanently marked nodes are implicitly held in order
-        let mut order = Vec::<T>::new();
+        let mut order = Vec::new();
         // invariant: no intersection between unmarked and temp_marked
         let mut unmarked = self.get_vertices();
-        let mut temp_marked = HashSet::<T>::new();
+        let mut temp_marked = HashSet::new();
 
         while !unmarked.is_empty() {
             self.visit(
@@ -134,8 +134,8 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     ///
     /// Returns a map from each visited node to its predecessor in the traversal.
     pub fn bfs(&self, root: T) -> HashMap<T, T> {
-        let mut prev = HashMap::<T, T>::new();
-        let mut queue = VecDeque::<T>::new();
+        let mut prev = HashMap::new();
+        let mut queue = VecDeque::new();
         queue.push_back(root);
         while !queue.is_empty() {
             let u = queue.pop_front().unwrap();
@@ -174,13 +174,13 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     /// Returns a vector of `Vec<T>`, each containing nodes of an SCC in traversal order.
     pub fn find_sccs(&self) -> Vec<Vec<T>> {
         let mut counter = 0;
-        let mut stack = Vec::<T>::new();
-        let mut onstack = HashSet::<T>::new();
-        let mut indices = HashMap::<T, usize>::new();
-        let mut lowlinks = HashMap::<T, usize>::new();
-        let mut sccs = Vec::<Vec<T>>::new();
+        let mut stack = Vec::new();
+        let mut onstack = HashSet::new();
+        let mut indices = HashMap::new();
+        let mut lowlinks = HashMap::new();
+        let mut sccs = Vec::new();
 
-        let mut call_stack = Vec::<StrongConnectFrame<T>>::new();
+        let mut call_stack = Vec::new();
 
         for node in self.get_vertices() {
             if indices.contains_key(&node) {
@@ -233,7 +233,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
 
                 if frame.child_call.is_none() {
                     if lowlinks.get(v) == indices.get(v) {
-                        let mut scc = Vec::<T>::new();
+                        let mut scc = Vec::new();
                         loop {
                             let w = stack.pop().unwrap();
                             onstack.remove(&w);
@@ -266,8 +266,8 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     /// nodes in a traversal order.
     pub fn paths_in_dag(&self, start: T) -> HashMap<T, Vec<Vec<T>>> {
         // paths(v) holds the set of paths from start to v
-        let mut paths = HashMap::<T, HashSet<Vec<T>>>::new();
-        let mut queue = VecDeque::<T>::new();
+        let mut paths = HashMap::new();
+        let mut queue = VecDeque::new();
         let reachable = self.reachable_from(start.clone());
 
         let add_binding = |n: T, p: Vec<T>, paths: &mut HashMap<T, HashSet<Vec<T>>>| {
@@ -294,7 +294,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
 
         paths
             .iter()
-            .map(|(k, v)| (k.clone(), v.iter().cloned().collect::<Vec<_>>()))
+            .map(|(k, v)| (k.clone(), v.iter().cloned().collect()))
             .collect()
     }
 
@@ -359,7 +359,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
                         .intersection(&vprime)
                         .into_iter()
                         .cloned()
-                        .collect::<HashSet<T>>(),
+                        .collect(),
                 )
             })
             .collect();
@@ -377,7 +377,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
             .iter()
             .map(|(k, v)| (f(k.clone()), v.iter().map(|n| f(n.clone())).collect()))
             .collect();
-        DiGraph::<Q> { edges: eprime }
+        DiGraph { edges: eprime }
     }
 
     /// Adds vertex v to the graph.
