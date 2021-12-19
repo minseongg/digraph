@@ -1,4 +1,6 @@
 //! Represents common behavior of all directed graphs.
+//!
+//! [`DiGraph.scala`](https://github.com/chipsalliance/firrtl/blob/v1.0.0/src/main/scala/firrtl/graph/DiGraph.scala)
 
 use std::cmp::min;
 use std::collections::VecDeque;
@@ -180,7 +182,14 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
         let mut lowlinks = HashMap::new();
         let mut sccs = Vec::new();
 
-        let mut call_stack = Vec::new();
+        // # Note
+        //
+        // Recursive code is transformed to iterative code by representing call stack into an explicit
+        // structure. Here, the stack data consists of the current vertex, its currently active edge,
+        // and the position in the function. Because there is only one recursive call site, remembering
+        // whether a child call was created on the last iteration where the current frame was active is
+        // sufficient to track the position.
+        let mut call_stack = Vec::<StrongConnectFrame<T>>::new();
 
         for node in self.get_vertices() {
             if indices.contains_key(&node) {
