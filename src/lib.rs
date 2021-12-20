@@ -2,12 +2,12 @@
 //!
 //! [`DiGraph.scala`](https://github.com/chipsalliance/firrtl/blob/v1.0.0/src/main/scala/firrtl/graph/DiGraph.scala)
 
+#![feature(hash_drain_filter)]
+
 use std::cmp::min;
-use std::collections::VecDeque;
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fmt::Debug;
 use std::hash::Hash;
-
-use hashbrown::{HashMap, HashSet};
 
 #[derive(Debug, Clone)]
 struct StrongConnectFrame<T: Debug + Clone + Eq + Hash> {
@@ -63,7 +63,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     /// Returns number of edges end from a node.
     pub fn indegree(&self, v: &T) -> usize {
         let mut indegree = 0;
-        for (_, edges) in &self.edges {
+        for edges in self.edges.values() {
             if edges.contains(v) {
                 indegree += 1;
             }
@@ -400,7 +400,7 @@ impl<T: Debug + Clone + Eq + Hash> DiGraph<T> {
     /// Removes vertex v from the graph.
     pub fn remove_vertex(&mut self, v: &T) {
         self.edges.remove(v);
-        for (_, edges) in &mut self.edges {
+        for edges in self.edges.values_mut() {
             edges.remove(v);
         }
     }
